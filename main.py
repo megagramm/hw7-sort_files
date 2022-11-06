@@ -1,16 +1,26 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+def read_files(lst):
+    data = {}
+    for filename in lst:
+        with open('sorted/'+filename) as f:
+            lines = f.readlines()
+            data[filename] = {'lines': lines, 'len': len(lines)}
+    return data
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def make_result_file(dct):
+    lst = []
+    for file, file_data in dct.items():
+        lst.append(file_data['len'])
+    lst.sort()
+    with open('result.txt', 'w') as f:
+        for ln in lst:
+            for filename, file_data in dct.items():
+                if ln == file_data['len']:
+                    f.write(filename+'\n')
+                    f.write(str(ln)+'\n')
+                    for line in file_data['lines']:
+                        f.write(line.strip('\n')+'\n')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+files = ['1.txt', '2.txt', '3.txt']
+make_result_file(read_files(files))
